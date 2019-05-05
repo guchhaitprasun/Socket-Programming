@@ -1,5 +1,5 @@
 # One-Way-Message
-### socket program to perform one-way message transfer using the Transmission Control Protocol**
+### socket program to perform one-way message transfer using the Transmission Control Protocol
 
 ## Development Environmnet 
 - **Operating System**  : Ubuntu 18.04 LTS
