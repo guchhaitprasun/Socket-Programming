@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <netdb.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#define SERVER_PORT 1997
+#define BUFF_SIZE 2048
+int main(int argc, char **argv)
+{
+    /*DECLARE VARIABLES*/
+    struct sockaddr_in server_address;
+    int server_socket;
+    int bind_status;
+    int received_bytes;
+    unsigned char buffer[BUFF_SIZE];
+    struct sockaddr_in client_address;
+    int sent_bytes;
+    socklen_t client_address_len = sizeof(client_address);
+
+    /*REST BODY*/
+    printf("The value of AF_INET is %d \n", AF_INET);
+    printf("The value of SERVER_PORT is %d \n", SERVER_PORT);
+    printf("The address of computer is %d \n", INADDR_ANY);
+
+    /*INITIALISING SOCKADDR_IN STRUCTURE*/
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(SERVER_PORT);
+    server_address.sin_addr.s_addr = htonl(INADDR_ANY);
+    memset(&(server_address.sin_zero), '\0', 8);
+    printf("Server Address details: \n 1. Server Port: %hu \n 
+        2. Address: %u \n 
+        3:  Family % hhu \n ", 
+        server_address.sin_port, server_address.sin_addr.s_addr,
+        server_address.sin_family
+    );
+
+    /*CREATING SOCKET*/
+    server_socket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (server_socket < 0)
+    {
+        perror("Error in creating socket !");
+        return 0;
+    }
+    else
+    {
+        printf("Server Socketfd is created \n");
+    }
+
+    /*BINDING*/
+    bind_status = bind(server_socket, (struct sockaddr *)&server_address,
+                       sizeof(server_address));
+    if (bind_status < 0)
+    {
+        perror("Error in binding i.e. binding failed");
+        return 0;
+    }
+    else
+    {
+        printf("Bind success ! \n");
+    }
+
+    /*RECEIVING DATA/MESSAGE FROM CLIENT AND PRINTING IT ON CONSOLE*/
+    memset(buffer, 0, BUFF_SIZE);
+    printf("Waiting for receiving data on socket created ! \n");
+    received_bytes = recvfrom(server_socket, buffer, BUFF_SIZE, 0, (struct sockaddr *)&client_address, &(client_address_len));
+    if (received_bytes < 0)
+    {
+        perror("Error in recvfrom!");
+        return 0;
+    }
+    else
+    {
+        buffer[received_bytes] = 0;
+        printf ("Received message from client: | %s | and bytes received is: | %d |
+                \n", buffer,received_bytes
+        );
+    }
+    close(server_socket);
+}
