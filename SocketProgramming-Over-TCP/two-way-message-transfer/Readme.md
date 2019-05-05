@@ -1,5 +1,5 @@
 # Two-Way-Message
-### socket program to perform two-way message transfer using the Transmission Control Protocol**
+### socket program to perform two-way message transfer using the Transmission Control Protocol
 
 ## Development Environmnet 
 - **Operating System**  : Ubuntu 18.04 LTS
